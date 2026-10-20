@@ -20,10 +20,18 @@
 <button data-page="shifts"><span>◷</span>المناوبات</button>
 <button data-page="more"><span>☷</span>المزيد</button>
 </div></nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL='https://jlehwkgdzbysmxyjzily.supabase.co';
+const SUPABASE_KEY='sb_publishable_zs1t9yzcKL_IGDLXbnu5gQ_97DuCEEI';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let authSession=null, userRole=null, cloudReady=false, cloudBusy=false;
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('hse_'+k))??d}catch(e){return d}};
-const save=(k,v)=>localStorage.setItem('hse_'+k,JSON.stringify(v));
+function save(k,v){
+ localStorage.setItem('hse_'+k,JSON.stringify(v));
+ if(authSession && userRole==='hse_officer' && cloudReady) syncCloud();
+}
 let workers=load('workers'),rooms=load('rooms'),shifts=load('shifts'),incidents=load('incidents'),settings=load('settings',{site:'الموقع الرئيسي'});
 let page='home',workerSearch='',roomSearch='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -32,8 +40,58 @@ const occupied=()=>rooms.reduce((n,r)=>n+(r.occupants||[]).length,0);
 const shellHead=()=>'<div class="top"><div class="brand"><div class="mark">HSE</div><div><h1>HSE CONTROL</h1><small>HEALTH • SAFETY • ENVIRONMENT</small></div></div><div class="date">CONTROL<br><b style="color:var(--gold)">● ONLINE</b></div></div>';
 const head=(title,sub,btn='')=>'<div class="page-head"><div><h2>'+title+'</h2><p>'+sub+'</p></div>'+btn+'</div>';
 const empty=(title,desc)=>'<div class="empty"><b>'+title+'</b>'+desc+'</div>';
+async function initializeCloud(){
+ userRole=authSession.user.app_metadata?.role||null;
+ if(!['hse_officer','manager'].includes(userRole)){
+   await sb.auth.signOut();authSession=null;userRole=null;
+   throw new Error('This account has no assigned role');
+ }
+ const {data,error}=await sb.from('app_state').select('payload').eq('id',1).maybeSingle();
+ if(error) throw error;
+ if(data?.payload){
+   const p=data.payload;
+   workers=Array.isArray(p.workers)?p.workers:[];
+   rooms=Array.isArray(p.rooms)?p.rooms:[];
+   shifts=Array.isArray(p.shifts)?p.shifts:[];
+   incidents=Array.isArray(p.incidents)?p.incidents:[];
+   settings=p.settings||{site:'الموقع الرئيسي'};
+   ['workers','rooms','shifts','incidents','settings'].forEach(k=>localStorage.setItem('hse_'+k,JSON.stringify(({workers,rooms,shifts,incidents,settings})[k])));
+ }else if(userRole==='hse_officer'){
+   const payload={workers,rooms,shifts,incidents,settings};
+   const {error:insertError}=await sb.from('app_state').insert({id:1,payload,updated_by:authSession.user.id});
+   if(insertError && insertError.code!=='23505') throw insertError;
+ }
+ cloudReady=true;
+}
+async function syncCloud(){
+ if(cloudBusy || !authSession || userRole!=='hse_officer')return;
+ cloudBusy=true;
+ try{
+   const payload={workers,rooms,shifts,incidents,settings};
+   const {error}=await sb.from('app_state').upsert({id:1,payload,updated_by:authSession.user.id,updated_at:new Date().toISOString()},{onConflict:'id'});
+   if(error)throw error;
+ }catch(e){toast('تعذر مزامنة البيانات السحابية. تحقق من الاتصال والصلاحيات.');}
+ finally{cloudBusy=false;}
+}
+async function signOut(){await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;go('home');render()}
+sb.auth.onAuthStateChange((_event,session)=>{authSession=session;});
+async function bootAuth(){
+ const {data,error}=await sb.auth.getSession();
+ if(error)return;
+ authSession=data.session;
+ if(authSession){try{await initializeCloud()}catch(e){authSession=null;await sb.auth.signOut();}}
+ render();
+}
 function render(){
- const app=$('#app');let html=shellHead();
+ const app=$('#app');
+ if(!authSession){
+   app.innerHTML='<div style="min-height:90vh;display:grid;place-items:center"><div class="form-card" style="width:100%;max-width:440px;margin:20px 0"><div class="brand" style="margin-bottom:22px"><div class="mark">HSE</div><div><h1>HSE CONTROL</h1><small>HEALTH • SAFETY • ENVIRONMENT</small></div></div><h2 style="font-size:21px">تسجيل الدخول</h2><p class="sub">سجّل الدخول بحساب مسؤول الأمن والوقاية أو المدير للوصول إلى البيانات المشتركة.</p><form id="login-form"><div class="field"><label>البريد الإلكتروني</label><input id="login-email" type="email" autocomplete="username" required placeholder="name@company.com"></div><div class="field"><label>كلمة المرور</label><input id="login-password" type="password" autocomplete="current-password" required placeholder="كلمة مرور الحساب"></div><button class="primary" style="width:100%;margin-top:8px" type="submit">دخول آمن</button><p class="sub" style="margin-top:14px">الحسابات تُنشأ من لوحة Supabase بواسطة المسؤول. لا توجد خاصية تسجيل عام.</p></form><p class="sub" id="login-error" style="color:var(--red);margin-top:10px"></p></div></div>';
+   $('#login-form').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;b.textContent='جارٍ التحقق…';$('#login-error').textContent='';try{const {data,error}=await sb.auth.signInWithPassword({email:$('#login-email').value.trim(),password:$('#login-password').value});if(error)throw error;authSession=data.session;await initializeCloud();render()}catch(err){$('#login-error').textContent='تعذر تسجيل الدخول. تحقق من البريد وكلمة المرور وصلاحية الحساب.';b.disabled=false;b.textContent='دخول آمن'}});
+   return;
+ }
+ const appRoleLabel=userRole==='manager'?'المدير':'مسؤول الأمن والوقاية';
+ const appRoleTag='<div class="note" style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><span>الحساب: '+esc(authSession.user.email)+' · '+appRoleLabel+'</span><button class="secondary" onclick="signOut()">خروج</button></div>';
+ let html=shellHead()+appRoleTag;
  if(page==='home'){
  html+='<div class="eyebrow">OPERATIONS OVERVIEW</div><h2 class="welcome">لوحة تحكم المدير</h2><p class="sub">نظرة شاملة على العمال والإقامة والعمليات اليومية.</p><div class="hero"><div class="hero-label">HSE • MANAGEMENT SYSTEM</div><h2>السلامة تبدأ بالتحكم</h2><p>تابع الموارد البشرية والإقامة والمناوبات والملاحظات من لوحة تحكم واحدة.</p></div><div class="section-head"><h3>مؤشرات التشغيل</h3><span>بيانات مسجلة محلياً</span></div><div class="stats">'+stat('إجمالي العمال',workers.length,'♙','سجل العمال')+stat('الغرف',rooms.length,'▦','الغرف المسجلة')+stat('أسرة مشغولة',occupied(),'▣','من أصل '+countBeds())+stat('الملاحظات',incidents.length,'⚑','الحوادث والملاحظات')+'</div><div class="section-head"><h3>الوصول السريع</h3><span>الوحدات الرئيسية</span></div><div class="modules">'+module('♙','إدارة العمال','الهوية والوظيفة','workers')+module('▦','الإقامة والغرف','الغرف والأسرة','housing')+module('◷','المناوبات','متابعة الجداول','shifts')+module('⚑','الحوادث والملاحظات','التسجيل والمتابعة','incidents')+module('▤','التقارير','ملخص البيانات','reports')+module('⚙','الإعدادات','النسخ الاحتياطي','settings')+'</div><div class="footer">HSE CONTROL · OPERATIONS PLATFORM</div>';
  }else if(page==='workers'){
@@ -91,8 +149,8 @@ function removeIncident(k){incidents=incidents.filter(i=>i.key!==k);save('incide
 function saveSettings(){settings.site=$('#site-name').value.trim()||'الموقع الرئيسي';save('settings',settings);toast('تم حفظ الإعدادات');render()}
 function exportData(){let data={product:'HSE CONTROL',version:1,exportedAt:new Date().toISOString(),workers,rooms,shifts,incidents,settings};let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hse-control-backup.json';a.click();URL.revokeObjectURL(a.href);toast('تم تجهيز النسخة الاحتياطية')}
 function importData(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{try{let d=JSON.parse(reader.result);if(!d||d.product!=='HSE CONTROL')throw Error('bad');workers=Array.isArray(d.workers)?d.workers:[];rooms=Array.isArray(d.rooms)?d.rooms:[];shifts=Array.isArray(d.shifts)?d.shifts:[];incidents=Array.isArray(d.incidents)?d.incidents:[];settings=d.settings||{site:'الموقع الرئيسي'};['workers','rooms','shifts','incidents','settings'].forEach(k=>save(k,eval(k)));toast('تمت استعادة البيانات');render()}catch(err){toast('الملف غير صالح أو ليس نسخة HSE CONTROL')}};reader.readAsText(f)}
-document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
-render();
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!authSession)return;go(b.dataset.page)}));
+bootAuth();
 </script>
 </body>
 </html>
