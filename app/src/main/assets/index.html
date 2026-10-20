@@ -24,7 +24,7 @@
 <script>
 const SUPABASE_URL='https://jlehwkgdzbysmxyjzily.supabase.co';
 const SUPABASE_KEY='sb_publishable_zs1t9yzcKL_IGDLXbnu5gQ_97DuCEEI';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=window.supabase?.createClient?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
 let authSession=null, userRole=null, cloudReady=false, cloudBusy=false;
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('hse_'+k))??d}catch(e){return d}};
@@ -79,12 +79,15 @@ async function syncCloud(){
  finally{cloudBusy=false;}
 }
 async function signOut(){await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;go('home');render()}
-sb.auth.onAuthStateChange((_event,session)=>{authSession=session;});
+if(sb)sb.auth.onAuthStateChange((_event,session)=>{authSession=session;});
 async function bootAuth(){
- const {data,error}=await sb.auth.getSession();
- if(error)return;
- authSession=data.session;
- if(authSession){try{await initializeCloud();page=userRole==='manager'?'manager-dashboard':'home'}catch(e){authSession=null;userRole=null;await sb.auth.signOut();}}
+ try{
+  if(!sb){authSession=null;userRole=null;render();const msg=$('#login-error');if(msg)msg.textContent='تعذر تحميل خدمة تسجيل الدخول. تحقق من اتصال الإنترنت ثم أعد فتح التطبيق.';return;}
+  const {data,error}=await sb.auth.getSession();
+  if(error){authSession=null;userRole=null;render();const msg=$('#login-error');if(msg)msg.textContent='تعذر استرجاع جلسة الدخول. يمكنك المحاولة مجدداً.';return;}
+  authSession=data.session;
+  if(authSession){try{await initializeCloud();page=userRole==='manager'?'manager-dashboard':'home'}catch(e){authSession=null;userRole=null;try{await sb.auth.signOut()}catch(ignore){}}}
+ }catch(e){authSession=null;userRole=null;}
  render();
 }
 function render(){
