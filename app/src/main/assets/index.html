@@ -14,7 +14,7 @@
 <body>
 <div class="toast" id="toast"></div><div class="app" id="app"></div>
 <nav class="nav"><div class="nav-inner">
-<button class="active" data-page="home"><span>⌂</span>الرئيسية</button>
+<button class="active" data-page="home"><span>⌂</span>لوحة تحكم المدير</button>
 <button data-page="workers"><span>♙</span>العمال</button>
 <button data-page="housing"><span>▦</span>الإقامة</button>
 <button data-page="shifts"><span>◷</span>المناوبات</button>
@@ -35,7 +35,7 @@ const empty=(title,desc)=>'<div class="empty"><b>'+title+'</b>'+desc+'</div>';
 function render(){
  const app=$('#app');let html=shellHead();
  if(page==='home'){
- html+='<div class="eyebrow">OPERATIONS OVERVIEW</div><h2 class="welcome">مركز التحكم والسلامة</h2><p class="sub">نظرة شاملة على العمال والإقامة والعمليات اليومية.</p><div class="hero"><div class="hero-label">HSE • MANAGEMENT SYSTEM</div><h2>السلامة تبدأ بالتحكم</h2><p>تابع الموارد البشرية والإقامة والمناوبات والملاحظات من لوحة تحكم واحدة.</p></div><div class="section-head"><h3>مؤشرات التشغيل</h3><span>بيانات مسجلة محلياً</span></div><div class="stats">'+stat('إجمالي العمال',workers.length,'♙','سجل العمال')+stat('الغرف',rooms.length,'▦','الغرف المسجلة')+stat('أسرة مشغولة',occupied(),'▣','من أصل '+countBeds())+stat('الملاحظات',incidents.length,'⚑','الحوادث والملاحظات')+'</div><div class="section-head"><h3>الوصول السريع</h3><span>الوحدات الرئيسية</span></div><div class="modules">'+module('♙','إدارة العمال','الهوية والوظيفة','workers')+module('▦','الإقامة والغرف','الغرف والأسرة','housing')+module('◷','المناوبات','متابعة الجداول','shifts')+module('⚑','الحوادث والملاحظات','التسجيل والمتابعة','incidents')+module('▤','التقارير','ملخص البيانات','reports')+module('⚙','الإعدادات','النسخ الاحتياطي','settings')+'</div><div class="footer">HSE CONTROL · OPERATIONS PLATFORM</div>';
+ html+='<div class="eyebrow">OPERATIONS OVERVIEW</div><h2 class="welcome">لوحة تحكم المدير</h2><p class="sub">نظرة شاملة على العمال والإقامة والعمليات اليومية.</p><div class="hero"><div class="hero-label">HSE • MANAGEMENT SYSTEM</div><h2>السلامة تبدأ بالتحكم</h2><p>تابع الموارد البشرية والإقامة والمناوبات والملاحظات من لوحة تحكم واحدة.</p></div><div class="section-head"><h3>مؤشرات التشغيل</h3><span>بيانات مسجلة محلياً</span></div><div class="stats">'+stat('إجمالي العمال',workers.length,'♙','سجل العمال')+stat('الغرف',rooms.length,'▦','الغرف المسجلة')+stat('أسرة مشغولة',occupied(),'▣','من أصل '+countBeds())+stat('الملاحظات',incidents.length,'⚑','الحوادث والملاحظات')+'</div><div class="section-head"><h3>الوصول السريع</h3><span>الوحدات الرئيسية</span></div><div class="modules">'+module('♙','إدارة العمال','الهوية والوظيفة','workers')+module('▦','الإقامة والغرف','الغرف والأسرة','housing')+module('◷','المناوبات','متابعة الجداول','shifts')+module('⚑','الحوادث والملاحظات','التسجيل والمتابعة','incidents')+module('▤','التقارير','ملخص البيانات','reports')+module('⚙','الإعدادات','النسخ الاحتياطي','settings')+'</div><div class="footer">HSE CONTROL · OPERATIONS PLATFORM</div>';
  }else if(page==='workers'){
  html+=head('إدارة العمال','سجل العامل والوظيفة والموقع','<button class="primary" onclick="workerForm()">+ إضافة عامل</button>');
  html+='<input class="search" placeholder="ابحث بالاسم أو المنصب أو رقم العامل" value="'+esc(workerSearch)+'" oninput="workerSearch=this.value;render()">';
