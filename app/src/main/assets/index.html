@@ -220,7 +220,7 @@ body:has(.app .top) .nav button.active span{background:#3a3325;color:#f2d99f}
 const SUPABASE_URL='https://jlehwkgdzbysmxyjzily.supabase.co';
 const SUPABASE_KEY='sb_publishable_zs1t9yzcKL_IGDLXbnu5gQ_97DuCEEI';
 const sb=window.supabase?.createClient?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
-let authSession=null, userRole=null, cloudReady=false, cloudBusy=false;
+let authSession=null, userRole=null, cloudReady=false, cloudBusy=false, cloudTimer=null, lastCloudUpdatedAt=null, syncQueued=false;
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('hse_'+k))??d}catch(e){return d}};
 function save(k,v){
@@ -240,40 +240,80 @@ const occupied=()=>rooms.reduce((n,r)=>n+(r.occupants||[]).length,0);
 const shellHead=()=>'<div class="top"><div class="brand"><div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5 39 11v12c0 10-6 16-15 20C15 39 9 33 9 23V11Z" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 24h16M24 16v16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><div class="brand-copy"><h1>HSE CONTROL</h1><small>HEALTH · SAFETY · ENVIRONMENT</small></div></div><div class="status-pill"><span></span>النظام نشط</div></div>';
 const head=(title,sub,btn='')=>'<div class="page-head"><div><h2>'+title+'</h2><p>'+sub+'</p></div>'+btn+'</div>';
 const empty=(title,desc)=>'<div class="empty"><b>'+title+'</b>'+desc+'</div>';
+function currentCloudPayload(){return {workers,rooms,shifts,incidents,settings};}
+function payloadHasRecords(p){
+ return !!(p&&((Array.isArray(p.workers)&&p.workers.length)||(Array.isArray(p.rooms)&&p.rooms.length)||(Array.isArray(p.shifts)&&p.shifts.length)||(Array.isArray(p.incidents)&&p.incidents.length)||(p.settings&&Object.keys(p.settings).some(k=>k!=='site'))||(p.settings?.site&&p.settings.site!=='الموقع الرئيسي')));
+}
+function applyCloudPayload(p){
+ workers=Array.isArray(p?.workers)?p.workers:[];
+ rooms=Array.isArray(p?.rooms)?p.rooms:[];
+ shifts=Array.isArray(p?.shifts)?p.shifts:[];
+ incidents=Array.isArray(p?.incidents)?p.incidents:[];
+ settings=p?.settings||{site:'الموقع الرئيسي'};
+ ['workers','rooms','shifts','incidents','settings'].forEach(k=>localStorage.setItem('hse_'+k,JSON.stringify(currentCloudPayload()[k])));
+}
 async function initializeCloud(){
  userRole=authSession.user.app_metadata?.role||null;
  if(!['hse_officer','manager'].includes(userRole)){
    await sb.auth.signOut();authSession=null;userRole=null;
    throw new Error('This account has no assigned role');
  }
- const {data,error}=await sb.from('app_state').select('payload').eq('id',1).maybeSingle();
+ const localPayload=currentCloudPayload();
+ const {data,error}=await sb.from('app_state').select('payload,updated_at').eq('id',1).maybeSingle();
  if(error) throw error;
  if(data?.payload){
-   const p=data.payload;
-   workers=Array.isArray(p.workers)?p.workers:[];
-   rooms=Array.isArray(p.rooms)?p.rooms:[];
-   shifts=Array.isArray(p.shifts)?p.shifts:[];
-   incidents=Array.isArray(p.incidents)?p.incidents:[];
-   settings=p.settings||{site:'الموقع الرئيسي'};
-   ['workers','rooms','shifts','incidents','settings'].forEach(k=>localStorage.setItem('hse_'+k,JSON.stringify(({workers,rooms,shifts,incidents,settings})[k])));
+   // Keep existing device records if the shared cloud row is still empty.
+   if(userRole==='hse_officer' && !payloadHasRecords(data.payload) && payloadHasRecords(localPayload)){
+     const stamp=new Date().toISOString();
+     const {error:seedError}=await sb.from('app_state').upsert({id:1,payload:localPayload,updated_by:authSession.user.id,updated_at:stamp},{onConflict:'id'});
+     if(seedError) throw seedError;
+     lastCloudUpdatedAt=stamp;
+   }else{
+     applyCloudPayload(data.payload);
+     lastCloudUpdatedAt=data.updated_at||null;
+   }
  }else if(userRole==='hse_officer'){
-   const payload={workers,rooms,shifts,incidents,settings};
-   const {error:insertError}=await sb.from('app_state').insert({id:1,payload,updated_by:authSession.user.id});
+   const stamp=new Date().toISOString();
+   const {error:insertError}=await sb.from('app_state').insert({id:1,payload:localPayload,updated_by:authSession.user.id,updated_at:stamp});
    if(insertError && insertError.code!=='23505') throw insertError;
+   lastCloudUpdatedAt=stamp;
  }
  cloudReady=true;
+ if(cloudTimer)clearInterval(cloudTimer);
+ cloudTimer=setInterval(pullCloud,5000);
 }
 async function syncCloud(){
- if(cloudBusy || !authSession || userRole!=='hse_officer')return;
+ if(!cloudReady || !authSession || userRole!=='hse_officer')return;
+ if(cloudBusy){syncQueued=true;return;}
  cloudBusy=true;
  try{
-   const payload={workers,rooms,shifts,incidents,settings};
-   const {error}=await sb.from('app_state').upsert({id:1,payload,updated_by:authSession.user.id,updated_at:new Date().toISOString()},{onConflict:'id'});
-   if(error)throw error;
+   do{
+     syncQueued=false;
+     const payload=currentCloudPayload();
+     const stamp=new Date().toISOString();
+     const {error}=await sb.from('app_state').upsert({id:1,payload,updated_by:authSession.user.id,updated_at:stamp},{onConflict:'id'});
+     if(error)throw error;
+     lastCloudUpdatedAt=stamp;
+   }while(syncQueued);
  }catch(e){toast('تعذر مزامنة البيانات السحابية. تحقق من الاتصال والصلاحيات.');}
  finally{cloudBusy=false;}
 }
-async function signOut(){await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;go('home');render()}
+async function pullCloud(){
+ if(!cloudReady || !authSession || cloudBusy || document.querySelector('#app form'))return;
+ try{
+   const {data,error}=await sb.from('app_state').select('payload,updated_at').eq('id',1).maybeSingle();
+   if(error||!data?.payload)return;
+   if(data.updated_at && lastCloudUpdatedAt && data.updated_at<=lastCloudUpdatedAt)return;
+   const remote=JSON.stringify(data.payload);
+   const local=JSON.stringify(currentCloudPayload());
+   lastCloudUpdatedAt=data.updated_at||lastCloudUpdatedAt;
+   if(remote!==local){
+     applyCloudPayload(data.payload);
+     render();
+   }
+ }catch(e){/* Keep the current screen usable during temporary network loss. */}
+}
+async function signOut(){if(cloudTimer)clearInterval(cloudTimer);cloudTimer=null;await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;lastCloudUpdatedAt=null;go('home');render()}
 if(sb)sb.auth.onAuthStateChange((_event,session)=>{authSession=session;});
 async function bootAuth(){
  // Render the login UI immediately; never leave the WebView blank while auth initializes.
