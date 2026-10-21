@@ -64,6 +64,19 @@
   .app:has(.top) .status-pill{font-size:9px;padding:7px 8px}
   .app:has(.top) .module{padding:14px;min-height:132px}
 }
+
+/* Officer dashboard: executive editorial layout */
+.app:has(.top) .modules{display:flex;flex-direction:column;gap:0;border-top:1px solid #35445a;counter-reset:ops}
+.app:has(.top) .module{counter-increment:ops;display:grid;grid-template-columns:38px minmax(0,1fr) 24px;align-items:center;gap:12px;min-height:80px;border:0;border-bottom:1px solid #2b3b50;border-radius:0;background:transparent;box-shadow:none}
+.app:has(.top) .module .ico{display:none}
+.app:has(.top) .module:before{content:'0' counter(ops);position:static;grid-column:1;grid-row:1/span 2;display:grid;place-items:center;width:33px;height:33px;border:1px solid #655638;border-radius:50%;background:#d9b46b08;color:#d9b46b;font-size:10px}
+.app:has(.top) .module:after{content:'↗';position:static;grid-column:3;grid-row:1/span 2;display:grid;place-items:center;width:23px;height:23px;border:1px solid #34465c;border-radius:50%;color:#e2c27d;font-size:14px}
+.app:has(.top) .module b{grid-column:2;grid-row:1;align-self:end;margin:0 0 5px;font-size:14px}
+.app:has(.top) .module small{grid-column:2;grid-row:2;align-self:start;font-size:10px;line-height:1.8}
+.app:has(.top) .hero{border-right:4px solid #d9b46b;border-radius:4px 20px 4px 20px;background:linear-gradient(115deg,#1d344b,#0d1a2b 78%);padding:25px 23px}
+.app:has(.top) .hero h2{font-size:clamp(23px,6vw,31px);line-height:1.55;font-weight:900}
+.app:has(.top) .stats{gap:8px}.app:has(.top) .stat{border-radius:3px 13px 3px 13px;background:linear-gradient(140deg,#192d44,#0e1b2c);min-height:112px}.app:has(.top) .stat .ico{display:none}.app:has(.top) .num{font-size:32px;font-weight:900;color:#f0d69b}
+.app:has(.top) .section-head{padding-bottom:10px;border-bottom:1px solid #2b3b50}
 </style>
 </head>
 <body>
