@@ -51,6 +51,49 @@
 .app:has(.top) .nav button span svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .app:has(.top) .nav button.active{color:#f5dda5;background:#d9b46b12}
 @media(max-width:390px){.app:has(.top)>.top{padding:15px 12px;min-height:80px}.app:has(.top) .mark{width:42px;height:42px}.app:has(.top) .brand{gap:9px}.app:has(.top) .brand h1{font-size:13px;letter-spacing:1px}.app:has(.top) .brand small{font-size:7px;letter-spacing:.2px}.app:has(.top) .status-pill{font-size:8px;padding:7px}.app:has(.top) .hero{padding:21px 16px}.app:has(.top) .hero h2{font-size:23px}.app:has(.top) .module{grid-template-columns:32px minmax(0,1fr) 22px;gap:9px;min-height:77px;padding:13px 3px}.app:has(.top) .module:before{width:29px;height:29px;font-size:9px}.app:has(.top) .module b{font-size:12px}.app:has(.top) .module small{font-size:9px}}
+/* Officer home UI refresh v2 */
+.app:has(.top){max-width:820px;padding:0 16px 112px}
+.app:has(.top)>.top{margin:0 -16px;padding:17px 18px;background:linear-gradient(110deg,#0a1424,#1b3048);border-bottom:1px solid #41536a;box-shadow:0 12px 28px #0004}
+.app:has(.top) .mark{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#273d56,#101a29);border-color:#b99a5d}
+.app:has(.top) .brand h1{font-size:15px;letter-spacing:1.5px;font-weight:900}
+.app:has(.top) .brand small{font-size:8px;letter-spacing:1px}
+.app:has(.top) .status-pill{border:1px solid #28584f;border-radius:99px;background:#102b2b;color:#a6e8d2;padding:8px 10px;font-size:10px}
+.app:has(.top) .hero{min-height:188px;padding:24px 22px;border:1px solid #354b63;border-right:3px solid #d9b46b;border-radius:22px 5px;background:radial-gradient(ellipse at 12% 10%,#294664,transparent 48%),linear-gradient(120deg,#1b3048,#111e30 75%);box-shadow:0 15px 32px #0003}
+.app:has(.top) .hero:before{content:"CONTROL ROOM  /  01";display:block;margin-bottom:15px;color:#91a8c0;font-size:9px;font-weight:800;letter-spacing:2px;direction:ltr;text-align:right}
+.app:has(.top) .hero:after{content:"";width:145px;height:145px;top:auto;bottom:-76px;left:-52px;border-color:#d9b46b38;box-shadow:0 0 0 16px #d9b46b08,0 0 0 32px #d9b46b06}
+.app:has(.top) .hero-label{display:inline-flex;padding:6px 9px;border:1px solid #79653f;border-radius:5px;background:#d9b46b0b;font-size:9px;color:#f0d69b}
+.app:has(.top) .hero h2{font-size:clamp(24px,6vw,32px);font-weight:900;line-height:1.5;margin:13px 0 8px}
+.app:has(.top) .hero p{max-width:90%;font-size:12px;line-height:2;color:#c0ccda}
+.app:has(.top) .section-head{margin:29px 0 13px;padding:0 2px 11px;border-bottom:1px solid #2d4159}
+.app:has(.top) .section-head h3{font-size:15px;font-weight:900}
+.app:has(.top) .section-head span{font-size:9px;color:#8398b0}
+.app:has(.top) .stats{gap:10px}
+.app:has(.top) .stat{min-height:116px;padding:15px 13px;border:1px solid #2b415a;border-radius:15px 5px;background:linear-gradient(145deg,#192d44,#101b2b);box-shadow:0 7px 18px #0002;position:relative}
+.app:has(.top) .stat:after{content:"";position:absolute;top:0;right:13px;width:28px;height:2px;background:#d9b46b}
+.app:has(.top) .stat:first-child{border-top:1px solid #2b415a}
+.app:has(.top) .stat .ico{display:none}
+.app:has(.top) .num{font-size:34px;line-height:1;color:#f0d69b;font-weight:900;margin:18px 0 8px}
+.app:has(.top) .modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;border:0}
+.app:has(.top) .module{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:140px;padding:15px 13px;border:1px solid #2b4058;border-radius:15px 5px;background:linear-gradient(150deg,#182b41,#101b2b);box-shadow:0 8px 18px #0002;text-align:right;position:relative}
+.app:has(.top) .module:before{content:none}
+.app:has(.top) .module:after{content:"↗";position:absolute;left:12px;top:12px;display:grid;place-items:center;width:25px;height:25px;border:1px solid #354b63;border-radius:8px;color:#e4c57e;font-size:15px}
+.app:has(.top) .module .ico{display:grid;place-items:center;width:39px;height:39px;margin:0 0 14px;border:1px solid #65563a;border-radius:12px;background:#302d26;color:#edcf8b;font-size:19px}
+.app:has(.top) .module b{font-size:13px;font-weight:900;margin:0 0 6px}
+.app:has(.top) .module small{font-size:10px;line-height:1.7;color:#8fa3ba}
+.app:has(.top) .module:active{transform:scale(.985);background:#1a3048;border-color:#c6a660}
+body:has(.app .top) .nav{background:rgba(8,17,29,.97);border-top:1px solid #2e435b;box-shadow:0 -10px 30px #0005;padding:9px 8px calc(9px + env(safe-area-inset-bottom))}
+body:has(.app .top) .nav-inner{width:min(820px,100%);gap:5px}
+body:has(.app .top) .nav button{flex:1;min-width:0;border-radius:10px;padding:6px 2px;color:#8194ab}
+body:has(.app .top) .nav button span{width:31px;height:29px;display:grid;place-items:center;margin:0 auto 5px;border-radius:9px;background:#14243a}
+body:has(.app .top) .nav button.active{color:#f2d99f;background:#d9b46b10}
+body:has(.app .top) .nav button.active span{background:#3b3324;color:#f2d99f}
+.app:has(.top) .page-head{padding:24px 1px 18px}
+.app:has(.top) .page-head h2{font-size:23px;font-weight:900}
+.app:has(.top) .form-card,.app:has(.top) .list-card,.app:has(.top) .empty,.app:has(.top) .info,.app:has(.top) .room{border-color:#2b4058;border-radius:15px 5px;background:linear-gradient(145deg,#14253a,#101b2b)}
+.app:has(.top) .primary{border-radius:8px 8px 8px 2px;background:linear-gradient(120deg,#f0d69b,#c6a15a);box-shadow:0 5px 14px #d9b46b18}
+@media(min-width:560px){.app:has(.top) .modules{grid-template-columns:repeat(3,minmax(0,1fr))}.app:has(.top) .module{min-height:150px}}
+@media(max-width:390px){.app:has(.top){padding-left:13px;padding-right:13px}.app:has(.top)>.top{margin:0 -13px;padding:15px 13px}.app:has(.top) .brand h1{font-size:12px}.app:has(.top) .brand small{font-size:7px}.app:has(.top) .hero{padding:21px 16px}.app:has(.top) .hero h2{font-size:23px}.app:has(.top) .num{font-size:30px}.app:has(.top) .module{min-height:132px;padding:13px 11px}.app:has(.top) .module b{font-size:12px}.app:has(.top) .module small{font-size:9px}}
+
 </style>
 </head>
 <body>
