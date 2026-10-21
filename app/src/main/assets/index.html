@@ -303,7 +303,7 @@ async function pullCloud(){
  try{
    const {data,error}=await sb.from('app_state').select('payload,updated_at').eq('id',1).maybeSingle();
    if(error||!data?.payload)return;
-   if(data.updated_at && lastCloudUpdatedAt && data.updated_at<=lastCloudUpdatedAt)return;
+   if(data.updated_at && lastCloudUpdatedAt && Date.parse(data.updated_at)<=Date.parse(lastCloudUpdatedAt))return;
    const remote=JSON.stringify(data.payload);
    const local=JSON.stringify(currentCloudPayload());
    lastCloudUpdatedAt=data.updated_at||lastCloudUpdatedAt;
