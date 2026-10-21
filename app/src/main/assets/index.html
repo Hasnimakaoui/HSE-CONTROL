@@ -94,6 +94,116 @@ body:has(.app .top) .nav button.active span{background:#3b3324;color:#f2d99f}
 @media(min-width:560px){.app:has(.top) .modules{grid-template-columns:repeat(3,minmax(0,1fr))}.app:has(.top) .module{min-height:150px}}
 @media(max-width:390px){.app:has(.top){padding-left:13px;padding-right:13px}.app:has(.top)>.top{margin:0 -13px;padding:15px 13px}.app:has(.top) .brand h1{font-size:12px}.app:has(.top) .brand small{font-size:7px}.app:has(.top) .hero{padding:21px 16px}.app:has(.top) .hero h2{font-size:23px}.app:has(.top) .num{font-size:30px}.app:has(.top) .module{min-height:132px;padding:13px 11px}.app:has(.top) .module b{font-size:12px}.app:has(.top) .module small{font-size:9px}}
 
+
+/* HSE CONTROL — redesigned officer command dashboard */
+.app:has(.top){max-width:860px;padding:0 18px 116px}
+.app:has(.top)>.top{
+  margin:0 -18px;padding:19px 20px 18px;min-height:88px;
+  background:linear-gradient(112deg,#07111f 0%,#10243a 55%,#18314a 100%);
+  border:0;border-bottom:1px solid #38506a;box-shadow:0 12px 32px #02071175;
+  position:relative;isolation:isolate
+}
+.app:has(.top)>.top:after{content:"";position:absolute;z-index:-1;inset:0 0 0 auto;width:34%;opacity:.32;background:repeating-linear-gradient(135deg,transparent 0 12px,#8ca4bd12 12px 13px)}
+.app:has(.top) .mark{
+  width:50px;height:50px;border-radius:16px 7px 16px 7px;
+  background:linear-gradient(145deg,#233f59,#0b1728);border:1px solid #d8b86d;
+  color:#f2d99c;box-shadow:0 0 0 4px #d9b46b0d,0 8px 20px #0004
+}
+.app:has(.top) .brand h1{font-size:16px;letter-spacing:1.8px;font-weight:900}
+.app:has(.top) .brand small{font-size:8px;letter-spacing:1.25px;color:#d4b975}
+.app:has(.top) .status-pill{display:flex;align-items:center;gap:7px;border:1px solid #315f57;border-radius:8px 8px 8px 2px;background:#102d2b;color:#b2efdc;padding:9px 11px;font-size:10px;font-weight:700}
+.app:has(.top) .status-pill span{width:7px;height:7px;border-radius:50%;background:#4bd4a6;box-shadow:0 0 0 4px #4bd4a61c}
+.app:has(.top) .account-strip{
+  margin:14px 0 0;padding:12px 13px;min-height:67px;gap:11px;
+  border:1px solid #30465f;border-radius:13px;background:linear-gradient(100deg,#14263b,#0d1b2d);
+  box-shadow:0 8px 22px #0002
+}
+.app:has(.top) .account-avatar{width:40px;height:40px;flex-basis:40px;border-radius:12px 5px 12px 5px;background:linear-gradient(145deg,#f0d69b,#bb9146);box-shadow:0 4px 12px #0003}
+.app:has(.top) .account-info b{font-size:12px;font-weight:800;color:#f5f7fb}
+.app:has(.top) .account-info small{font-size:10px;color:#91a5bb}
+.app:has(.top) .role-chip{border:1px solid #53613f;border-radius:7px;background:#292f25;color:#e8d49a;padding:7px 9px;font-size:9px}
+.app:has(.top) .role-chip:before{background:#4bd4a6}
+.app:has(.top) .account-strip .secondary{border-radius:8px;background:#192d43;border-color:#3b5068;color:#d8e1ed;font-size:10px}
+.app:has(.top) .hero{
+  margin-top:17px;min-height:200px;padding:24px 23px 25px;
+  border:1px solid #354f69;border-right:4px solid #e0bd70;border-radius:17px 6px 17px 6px;
+  background:radial-gradient(ellipse at 15% 0%,#284b6b 0%,transparent 45%),linear-gradient(120deg,#182f48,#0c1a2c 76%);
+  box-shadow:0 18px 36px #0003
+}
+.app:has(.top) .hero:before{content:"لوحة القيادة  /  العمليات";display:block;direction:rtl;text-align:right;font-size:10px;font-weight:800;color:#9bb2c9;letter-spacing:.3px;margin-bottom:16px}
+.app:has(.top) .hero-label{border:1px solid #6c6044;border-radius:5px;padding:6px 9px;background:#d9b46b12;color:#f2d99c;font-size:9px;letter-spacing:1px}
+.app:has(.top) .hero h2{font-size:clamp(24px,5.7vw,32px);line-height:1.5;margin:13px 0 8px;font-weight:900;letter-spacing:-.4px}
+.app:has(.top) .hero p{font-size:12px;line-height:2;max-width:90%;color:#c0ccda}
+.app:has(.top) .section-head{margin:30px 1px 14px;padding:0 0 11px;border:0;border-bottom:1px solid #2b4058;align-items:center}
+.app:has(.top) .section-head h3{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#f0f4fa}
+.app:has(.top) .section-head h3:before{content:"";display:block;width:4px;height:19px;border-radius:4px;background:#d9b46b}
+.app:has(.top) .section-head span{font-size:10px;color:#91a4ba}
+.app:has(.top) .stats{gap:11px}
+.app:has(.top) .stat{
+  min-height:124px;padding:16px 15px;border:1px solid #2d435c;border-radius:14px;
+  background:linear-gradient(145deg,#192e45 0%,#101d2f 75%);box-shadow:0 9px 20px #0002
+}
+.app:has(.top) .stat:after{right:auto;left:14px;width:25px;height:3px;border-radius:5px;background:linear-gradient(90deg,#e7ca84,#9f7a3d)}
+.app:has(.top) .stat-top{font-size:11px;color:#b3c1d0}
+.app:has(.top) .stat .ico{display:grid;place-items:center;width:31px;height:31px;border:1px solid #4d4a3a;border-radius:10px;background:#d9b46b10;color:#e7cb88}
+.app:has(.top) .stat .ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app:has(.top) .num{font-size:32px;color:#f3dca0;font-weight:900;margin:15px 0 7px}
+.app:has(.top) .hint{font-size:10px;color:#8fa3ba}
+.app:has(.top) .modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border:0}
+.app:has(.top) .module{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:0;
+  min-height:155px;padding:16px 15px;border:1px solid #2c425a;border-radius:15px 5px 15px 5px;
+  background:linear-gradient(145deg,#182c42,#0e1b2c);box-shadow:0 9px 22px #0002;text-align:right;
+  position:relative;overflow:hidden;transition:transform .16s,border-color .16s,background .16s
+}
+.app:has(.top) .module:before{content:none}
+.app:has(.top) .module:after{
+  content:"↗";position:absolute;left:13px;top:13px;display:grid;place-items:center;
+  width:27px;height:27px;border:1px solid #3c5269;border-radius:9px;
+  background:#0b192a;color:#e9cc87;font-size:15px
+}
+.app:has(.top) .module .ico{
+  display:grid;place-items:center;width:45px;height:45px;margin:0 0 16px;
+  border:1px solid #5c553e;border-radius:13px 5px 13px 5px;
+  background:linear-gradient(145deg,#343225,#202a35);color:#f0d48d;font-size:20px
+}
+.app:has(.top) .module .ico svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app:has(.top) .module b{font-size:14px;line-height:1.6;font-weight:900;margin:0 0 5px;color:#f2f5fa}
+.app:has(.top) .module small{font-size:10px;line-height:1.8;color:#91a4ba}
+.app:has(.top) .module:active{transform:scale(.985);border-color:#c9a85f;background:linear-gradient(145deg,#213b55,#14273b)}
+.app:has(.top) .footer{padding-top:10px;color:#657991;letter-spacing:1.2px}
+body:has(.app .top) .nav{background:rgba(7,16,28,.97);border-top:1px solid #30465d;box-shadow:0 -10px 28px #0005;padding:9px 9px calc(9px + env(safe-area-inset-bottom))}
+body:has(.app .top) .nav-inner{width:min(860px,100%);gap:6px}
+body:has(.app .top) .nav button{flex:1;min-width:0;border-radius:11px;padding:7px 3px;color:#8799ae}
+body:has(.app .top) .nav button span{width:31px;height:29px;display:grid;place-items:center;margin:0 auto 5px;border-radius:9px;background:#17283c}
+body:has(.app .top) .nav button span svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body:has(.app .top) .nav button.active{color:#f2d99f;background:#d9b46b10}
+body:has(.app .top) .nav button.active span{background:#3a3325;color:#f2d99f}
+@media(min-width:560px){.app:has(.top) .modules{grid-template-columns:repeat(3,minmax(0,1fr))}.app:has(.top) .module{min-height:160px}}
+@media(max-width:420px){
+ .app:has(.top){padding-left:13px;padding-right:13px}
+ .app:has(.top)>.top{margin:0 -13px;padding:14px 13px;min-height:78px}
+ .app:has(.top) .mark{width:43px;height:43px}
+ .app:has(.top) .brand{gap:8px}
+ .app:has(.top) .brand h1{font-size:12px;letter-spacing:1px}
+ .app:has(.top) .brand small{font-size:6.5px;letter-spacing:.4px}
+ .app:has(.top) .status-pill{font-size:8px;padding:7px}
+ .app:has(.top) .account-strip{gap:7px;padding:9px}
+ .app:has(.top) .account-avatar{width:33px;height:33px;flex-basis:33px}
+ .app:has(.top) .account-info b{font-size:10px}
+ .app:has(.top) .account-info small{font-size:8px}
+ .app:has(.top) .role-chip{font-size:8px;padding:6px}
+ .app:has(.top) .account-strip .secondary{font-size:9px;padding:7px}
+ .app:has(.top) .hero{padding:20px 16px;min-height:185px}
+ .app:has(.top) .hero h2{font-size:23px}
+ .app:has(.top) .stat{padding:13px 11px;min-height:112px}
+ .app:has(.top) .num{font-size:29px}
+ .app:has(.top) .module{min-height:143px;padding:13px 11px}
+ .app:has(.top) .module b{font-size:12px}
+ .app:has(.top) .module small{font-size:9px}
+ .app:has(.top) .module .ico{width:39px;height:39px;margin-bottom:12px}
+}
+
 </style>
 </head>
 <body>
