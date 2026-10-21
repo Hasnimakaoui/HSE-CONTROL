@@ -1,0 +1,41 @@
+name: Build HSE-CONTROL Desktop
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'desktop/**'
+      - 'app/src/main/assets/index.html'
+      - '.github/workflows/build-desktop.yml'
+permissions:
+  contents: read
+actions: read
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Install app dependencies
+        working-directory: desktop
+        run: npm ci
+      - name: Prepare desktop app entry
+        shell: pwsh
+        run: Copy-Item app/src/main/assets/index.html desktop/app.html
+      - name: Build Windows installer
+        working-directory: desktop
+        run: npm run dist:win
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: HSE-CONTROL-Windows-Installer
+          path: desktop/dist/*.exe
+          if-no-files-found: error
