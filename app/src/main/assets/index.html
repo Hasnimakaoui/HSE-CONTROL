@@ -276,6 +276,8 @@ async function syncCloud(){
 async function signOut(){await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;go('home');render()}
 if(sb)sb.auth.onAuthStateChange((_event,session)=>{authSession=session;});
 async function bootAuth(){
+ // Render the login UI immediately; never leave the WebView blank while auth initializes.
+ render();
  try{
   if(!sb){authSession=null;userRole=null;render();const msg=$('#login-error');if(msg)msg.textContent='تعذر تحميل خدمة تسجيل الدخول. تحقق من اتصال الإنترنت ثم أعد فتح التطبيق.';return;}
   const {data,error}=await sb.auth.getSession();
