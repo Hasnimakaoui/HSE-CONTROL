@@ -1,0 +1,44 @@
+{
+  "name": "hse-control-desktop",
+  "version": "1.0.0",
+  "description": "HSE-CONTROL desktop application",
+  "main": "main.cjs",
+  "author": "HSE-CONTROL",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "dz.hsecontrol.desktop",
+    "productName": "HSE-CONTROL",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "app.html"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "HSE-CONTROL-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
