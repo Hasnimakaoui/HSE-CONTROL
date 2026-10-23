@@ -326,6 +326,42 @@ body:has(.manager-console){background:#e9edf0;color:#152438}
 .manager-console .empty{background:#fff;color:#718091;border:1px dashed #cbd5dc;border-radius:2px}
 @media(min-width:700px){.manager-console .command-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.manager-console .command-kpi{border-bottom:0}.manager-console .command-kpi:last-child{border-left:0}}
 @media(max-width:650px){.app:has(.manager-console){padding:0 10px 35px}.manager-console .command-head{padding:15px 13px;align-items:flex-start}.manager-console .command-brand{gap:10px}.manager-console .command-logo{width:43px;height:43px;flex-basis:43px}.manager-console .command-title{font-size:17px}.manager-console .command-overline{font-size:7px;letter-spacing:1px}.manager-console .command-subtitle{font-size:10px;max-width:220px;line-height:1.6}.manager-console .command-head-actions{flex-direction:column;align-items:flex-end;gap:6px}.manager-console .command-live{font-size:9px;padding:6px}.manager-console .command-exit{padding:7px 9px}.manager-console .command-intro{padding:23px 18px;min-height:0}.manager-console .command-intro h1{font-size:25px}.manager-console .command-intro p{font-size:11px}.manager-console .command-intro-mark{width:76px;height:76px;flex-basis:76px}.manager-console .command-intro-mark:before{inset:5px}.manager-console .command-intro-mark:after{inset:10px}.manager-console .command-intro-mark span{font-size:17px}.manager-console .command-intro-mark small{font-size:6px;letter-spacing:1px}.manager-console .command-intro-mark b{left:14px;right:14px}.manager-console .command-kpi{padding:15px 12px;min-height:100px}.manager-console .command-kpi b{font-size:29px}.manager-console .manager-create-layout{grid-template-columns:1fr}.manager-console .access-note{min-height:0;padding:20px}.manager-console .manager-grid{grid-template-columns:1fr}}
+
+/* HSE CONTROL cinematic electric-blue glass refresh */
+:root{--bg:#030914;--panel:rgba(8,22,40,.88);--panel2:rgba(13,32,56,.92);--gold:#19baff;--gold2:#8be4ff;--text:#f2f8ff;--muted:#91a8c2;--line:#163d60;--green:#32e6bd;--red:#ff647d;--blue:#19baff}
+body{background:radial-gradient(ellipse at 82% -8%,#073e68 0,transparent 43%),radial-gradient(ellipse at 0% 55%,#071c37 0,transparent 45%),#030914;color:var(--text)}
+.app{padding-bottom:112px}
+.app:has(.top)>.top{border:1px solid #12629a;border-radius:18px;background:linear-gradient(125deg,rgba(5,36,64,.94),rgba(4,12,26,.94));box-shadow:0 0 28px #008cff18,inset 0 1px #8bdcff18}
+.app:has(.top)>.top:before{background:linear-gradient(#16c8ff,#176bff);box-shadow:0 0 16px #00baff}
+.app:has(.top) .mark{border-color:#168bd1;color:#64dcff;background:linear-gradient(145deg,#0d3b60,#071426);box-shadow:0 0 0 5px #08a9ff0b,0 0 22px #00aaff24}
+.app:has(.top) .brand small{color:#62d9ff}
+.app:has(.top) .status-pill{border:1px solid #087e75;background:#062b30;color:#9bffe8}
+.app:has(.top) .hero{border:1px solid #14517c;border-right:3px solid #16baff;border-radius:18px;background:linear-gradient(120deg,rgba(9,43,70,.96),rgba(5,15,30,.96));box-shadow:0 14px 36px #0007,0 0 24px #009dff12}
+.app:has(.top) .hero-label{color:#66ddff}
+.app:has(.top) .hero-label:before{background:#16c8ff;box-shadow:0 0 12px #16c8ff}
+.app:has(.top) .hero:after{color:#19baff0b}
+.app:has(.top) .section-head{border-bottom-color:#143652}
+.app:has(.top) .stat{border:1px solid #174367;border-radius:15px;background:linear-gradient(145deg,rgba(12,36,61,.96),rgba(5,16,31,.96));box-shadow:inset 0 1px #b4e9ff0a,0 9px 24px #0004}
+.app:has(.top) .stat:first-child{border-top:2px solid #16baff}
+.app:has(.top) .num{color:#75ddff;text-shadow:0 0 20px #009dff22}
+.app:has(.top) .module,.app:has(.top) .manager-card,.app:has(.top) .form-card,.app:has(.top) .list-card,.app:has(.top) .empty,.app:has(.top) .info,.app:has(.top) .room{border:1px solid #164368;background:linear-gradient(145deg,rgba(10,31,53,.94),rgba(5,15,29,.96));box-shadow:inset 0 1px #a8e8ff0a,0 8px 22px #0003;backdrop-filter:blur(14px)}
+.app:has(.top) .module:active{border-color:#19baff;box-shadow:0 0 20px #00aaff1e}
+.app:has(.top) .nav{background:rgba(3,10,22,.91);border-top:1px solid #14517c;box-shadow:0 -8px 30px #0005;backdrop-filter:blur(22px)}
+.app:has(.top) .nav button.active{color:#4bd4ff;text-shadow:0 0 14px #00aaff55}
+.app:has(.top) .primary{background:linear-gradient(120deg,#27c7ff,#1678f4);color:#031323;box-shadow:0 5px 18px #008cff26}
+.app:has(.top) .field input:focus,.app:has(.top) .field select:focus,.app:has(.top) .field textarea:focus{border-color:#19baff;box-shadow:0 0 0 3px #19baff18}
+.app:has(.top) .field input,.app:has(.top) .field select,.app:has(.top) .field textarea,.app:has(.top) .search{border-color:#174368;background:rgba(4,15,29,.9)}
+.app:has(.top) .avatar{background:linear-gradient(145deg,#12446b,#0b213b);color:#8de7ff;border:1px solid #1b6491}
+.app:has(.top) .account-avatar{background:linear-gradient(145deg,#26caff,#1674e8);color:#031323}
+.app:has(.top) .exec-top,.app:has(.top) .exec-hero{border-color:#15517b;background:linear-gradient(120deg,#0b2d4c,#071426 78%)}
+.app:has(.top) .exec-emblem{background:linear-gradient(145deg,#5be0ff,#1478e9);color:#031323;box-shadow:0 0 24px #00aaff35}
+.app:has(.top) .exec-top small,.app:has(.top) .exec-stamp,.app:has(.top) .exec-kicker{color:#67dcff}
+.app:has(.top) .exec-stamp{border-color:#15517b}
+.app:has(.top) .exec-action{border-color:#164368;background:linear-gradient(145deg,#0c2b49,#071426);border-radius:14px}
+.app:has(.top) .manager-number{color:#73ddff}
+.app:has(.top) .role-chip{border-color:#15517b;color:#80e5ff}
+.app:has(.top) .role-chip:before{box-shadow:0 0 10px #32e6bd}
+
 </style>
 </head>
 <body>
