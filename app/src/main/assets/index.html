@@ -205,21 +205,50 @@ body:has(.app .top) .nav button.active span{background:#3a3325;color:#f2d99f}
 }
 
 
-/* Minimal manager dashboard — scoped to manager UI only */
-.manager-console{max-width:100%;color:#eaf1f8}
-.manager-console .manager-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 18px;padding:18px;border:1px solid #2a4057;border-radius:18px;background:linear-gradient(125deg,#14283d,#0d1726)}
-.manager-console .manager-top h2{margin:0;font-size:21px;letter-spacing:-.4px}.manager-console .manager-top small{display:block;margin-top:5px;color:#8ea4bc;font-size:11px}
-.manager-console .manager-mark{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#163b3d;color:#75f0d2;font-weight:900;font-size:20px}
-.manager-console .manager-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 22px}
-.manager-console .manager-metric{padding:14px;border:1px solid #273b51;border-radius:15px;background:#111e2f}.manager-console .manager-metric small{display:block;color:#91a4ba;font-size:11px}.manager-console .manager-metric b{display:block;margin-top:7px;font-size:27px;line-height:1.1;color:#f2f7fc}
-.manager-console .manager-metric:nth-child(2) b{color:#ffd28b}.manager-console .manager-metric:nth-child(3) b{color:#6ee7ca}.manager-console .manager-metric:nth-child(4) b{color:#9acbff}
-.manager-console .manager-section{margin:20px 0}.manager-console .manager-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.manager-console .manager-section-head h3{font-size:15px;margin:0}
-.manager-console .manager-count{border:1px solid #2a4057;border-radius:8px;padding:5px 8px;color:#9fb4c9;font-size:10px;white-space:nowrap}
-.manager-console .manager-create-card{padding:15px;border:1px solid #2a4057;border-radius:16px;background:#111e2f}.manager-console .manager-create-card .field{margin-bottom:11px}.manager-console .manager-create-card label{font-size:11px;color:#b9c7d8}.manager-console .manager-create-card input{background:#0b1523;border-color:#2b4058}.manager-console .manager-create-card .primary{width:100%;background:#54e0c1;color:#08221f;border-radius:10px;font-weight:800}.manager-console .manager-create-card .sub{font-size:11px}
-.manager-console .manager-grid{display:grid;grid-template-columns:1fr;gap:10px}.manager-console .manager-card{padding:15px;border:1px solid #2a4057;border-radius:15px;background:#111e2f;min-width:0}.manager-console .manager-card h3{margin:0 0 8px;font-size:13px;color:#f1f6fb}.manager-console .manager-card p{margin:5px 0;color:#a8b8ca;font-size:11px;overflow-wrap:anywhere}
-.manager-console .manager-card .manager-number{font-size:29px;font-weight:850;color:#68e5cb;margin:9px 0 0}.manager-console .manager-card .manager-number:after{content:' عامل';font-size:11px;color:#8ea4bc;font-weight:400}.manager-console .manager-card details{margin-top:10px;padding-top:9px;border-top:1px solid #26364b;font-size:11px}.manager-console .manager-card summary{cursor:pointer;color:#76e8d0}.manager-console .manager-card pre{color:#b9c7d8}
-.manager-console .manager-row{padding:13px 0;border-bottom:1px solid #26364b}.manager-console .manager-row:last-child{border-bottom:0}.manager-console .manager-row>b{display:block;font-size:13px}.manager-console .manager-row>small{display:block;margin-top:4px;color:#90a4bb;font-size:10px}.manager-console .manager-row>p{font-size:12px;color:#bdcad8;line-height:1.6;margin:7px 0}.manager-console .manager-tag{display:inline-block;border-radius:7px;background:#3a3020;color:#ffd28b;padding:4px 7px;font-size:10px}.manager-console #manager-submissions{padding:0 14px;border:1px solid #273b51;border-radius:15px;background:#111e2f}
-@media(min-width:560px){.manager-console .manager-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.manager-console .manager-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-console .manager-top{padding:22px}}
+/* Enterprise command dashboard — manager page only */
+.manager-console{max-width:1120px;margin:0 auto;color:#e9eff7;font-variant-numeric:tabular-nums}
+.manager-console .command-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 18px 16px;margin:5px 0 14px;background:#101b2a;border:1px solid #26364b;border-radius:16px;box-shadow:0 8px 28px #0002}
+.manager-console .command-brand{display:flex;align-items:center;gap:12px;min-width:0}
+.manager-console .command-logo{display:grid;place-items:center;width:43px;height:43px;flex:0 0 43px;border-radius:12px;background:#d5f5ed;color:#123c3b;font-size:13px;font-weight:950;letter-spacing:-1px}
+.manager-console .command-title{font-size:19px;line-height:1.3;font-weight:850;letter-spacing:-.4px;margin:0}
+.manager-console .command-subtitle{font-size:10px;color:#8fa2b8;letter-spacing:1.5px;margin-top:5px}
+.manager-console .command-live{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid #2d594f;border-radius:9px;color:#8ce8c8;background:#112b2a;font-size:10px;white-space:nowrap}
+.manager-console .command-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#64e5b6;box-shadow:0 0 9px #64e5b688}
+.manager-console .command-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 20px}
+.manager-console .command-kpi{position:relative;overflow:hidden;min-width:0;padding:14px 14px 13px;background:#111e2e;border:1px solid #28394f;border-radius:14px}
+.manager-console .command-kpi:after{content:'';position:absolute;top:0;right:0;bottom:0;width:3px;background:#5edcc2}
+.manager-console .command-kpi:nth-child(2):after{background:#e7bd72}.manager-console .command-kpi:nth-child(3):after{background:#83baff}.manager-console .command-kpi:nth-child(4):after{background:#a5a6ff}
+.manager-console .command-kpi small{display:block;color:#91a4ba;font-size:10px;line-height:1.5}
+.manager-console .command-kpi b{display:block;margin-top:8px;font-size:29px;line-height:1;color:#f3f7fb;font-weight:850}
+.manager-console .command-section{margin:20px 0}
+.manager-console .command-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.manager-console .command-section-head h3{margin:0;font-size:14px;font-weight:800;color:#eaf1f8}
+.manager-console .command-section-head small{font-size:10px;color:#7f94ab}
+.manager-console .command-pill{border:1px solid #30435a;background:#152337;color:#b9c9da;border-radius:7px;padding:5px 8px;font-size:10px;white-space:nowrap}
+.manager-console .manager-create-card{padding:15px;background:#111e2e;border:1px solid #28394f;border-radius:14px}
+.manager-console .manager-create-card .field{margin-bottom:11px}
+.manager-console .manager-create-card label{font-size:11px;color:#b9c7d8}
+.manager-console .manager-create-card input{background:#0b1523;border-color:#2b4058;border-radius:9px}
+.manager-console .manager-create-card .primary{width:100%;background:#c9f2e8;color:#0c3531;border:0;border-radius:9px;font-weight:850;min-height:43px}
+.manager-console .manager-create-card .sub{font-size:11px}
+.manager-console .manager-grid{display:grid;grid-template-columns:1fr;gap:9px}
+.manager-console .manager-card{min-width:0;padding:14px;border:1px solid #28394f;border-radius:13px;background:#111e2e;box-shadow:0 5px 16px #0001}
+.manager-console .manager-card h3{display:flex;align-items:center;gap:8px;margin:0 0 9px;font-size:12px;color:#edf3fa}
+.manager-console .manager-card h3:before{content:'HSE';display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#203c49;color:#8be8d1;font-size:8px;letter-spacing:-.4px}
+.manager-console .manager-card p{margin:5px 0;color:#9eafc2;font-size:10px;line-height:1.6;overflow-wrap:anywhere}
+.manager-console .manager-card .manager-number{font-size:27px;font-weight:900;color:#eaf8f4;margin:8px 0 0;line-height:1.1}
+.manager-console .manager-card .manager-number:after{content:' عامل';font-size:10px;color:#8fa4b9;font-weight:500}
+.manager-console .manager-card details{margin-top:10px;padding-top:9px;border-top:1px solid #28394f;font-size:10px}
+.manager-console .manager-card summary{cursor:pointer;color:#82e5d0;font-weight:700}
+.manager-console .manager-card pre{color:#b9c7d8}
+.manager-console .command-report-list{padding:0 13px;border:1px solid #28394f;border-radius:13px;background:#111e2e}
+.manager-console .manager-row{padding:13px 0;border-bottom:1px solid #28394f}
+.manager-console .manager-row:last-child{border-bottom:0}
+.manager-console .manager-row>b{display:block;font-size:12px;color:#edf3fa}
+.manager-console .manager-row>small{display:block;margin-top:5px;color:#879cb2;font-size:10px}
+.manager-console .manager-row>p{font-size:11px;color:#b3c0cf;line-height:1.6;margin:7px 0}
+.manager-console .manager-tag{display:inline-block;border-radius:6px;background:#3a3020;color:#ffd28b;padding:4px 7px;font-size:9px}
+@media(min-width:560px){.manager-console .command-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.manager-console .manager-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-console .manager-create-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.8fr);gap:14px;align-items:start}}
 </style>
 </head>
 <body>
@@ -434,12 +463,12 @@ function render(){
  const todayReports=incidents.filter(i=>i.date===today);
  const reviewedReports=incidents.length-openReports.length;
  const latest=incidents.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,6);
- const officerCards=managerAccounts.length?managerAccounts.map((account,index)=>{const row=managerOfficerStates.find(x=>x.user_id===account.id)||{};const p=row.payload||{};const updated=row.updated_at?new Date(row.updated_at).toLocaleString('ar-DZ'):'لا توجد بيانات';return `<div class="manager-card"><h3>مسؤول ${index+1}</h3><p>${esc(account.email||'بريد غير متوفر')}</p><div class="manager-number">${Array.isArray(p.workers)?p.workers.length:0}</div><p>${Array.isArray(p.rooms)?p.rooms.length:0} غرفة · ${Array.isArray(p.shifts)?p.shifts.length:0} مناوبة · ${Array.isArray(p.incidents)?p.incidents.length:0} تقرير</p><p>آخر تحديث: ${esc(updated)}</p><details><summary>تفاصيل الحساب</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;font-size:10px;direction:ltr;text-align:left">${esc(JSON.stringify(p,null,2))}</pre></details></div>`;}).join(''):'<div class="empty"><b>لا توجد حسابات</b>أنشئ حساب مسؤول جديد.</div>';
-  html+='<div class="manager-console"><div class="manager-top"><div><h2>لوحة المدير</h2><small>HSE CONTROL · الإدارة والمتابعة</small></div><div class="manager-mark">HSE</div></div>';
-  html+='<div class="manager-metrics"><div class="manager-metric"><small>حسابات المسؤولين</small><b>'+managerAccounts.length+'</b></div><div class="manager-metric"><small>إجمالي التقارير</small><b>'+incidents.length+'</b></div><div class="manager-metric"><small>بانتظار المراجعة</small><b>'+openReports.length+'</b></div><div class="manager-metric"><small>تقارير اليوم</small><b>'+todayReports.length+'</b></div></div>';
-  html+='<div class="manager-section"><div class="manager-section-head"><h3>إضافة مسؤول</h3><span class="manager-count">حساب جديد</span></div><div class="manager-create-card"><form id="officer-create-form" onsubmit="createOfficerAccount(event)"><div class="field"><label>البريد الإلكتروني</label><input id="officer-email" type="email" required autocomplete="off" placeholder="officer@company.com"></div><div class="field"><label>كلمة المرور · 8 أحرف على الأقل</label><input id="officer-password" type="password" required minlength="8" autocomplete="new-password" placeholder="كلمة المرور"></div><button id="officer-create-button" class="primary" type="submit">+ إنشاء الحساب</button><p id="officer-create-status" class="sub" style="margin-top:10px;overflow-wrap:anywhere"></p></form></div></div>';
-  html+='<div class="manager-section"><div class="manager-section-head"><h3>المسؤولون</h3><span class="manager-count">'+managerAccounts.length+' حساب</span></div><div class="manager-grid">'+officerCards+'</div></div>';
-  html+='<div class="manager-section"><div class="manager-section-head"><h3>آخر التقارير</h3><button class="secondary" onclick="go(\'reports\')">عرض الكل</button></div><div id="manager-submissions">'+(latest.length?latest.map(i=>'<div class="manager-row"><b>'+esc(i.title||'تقرير دون عنوان')+'</b><small>'+esc(i.date||'—')+' · '+esc(i.type||'غير مصنف')+'</small><p>'+esc(i.desc||'لا توجد تفاصيل')+'</p><span class="manager-tag">'+(openReports.some(x=>x.key===i.key)?'بانتظار المراجعة':'تمت المراجعة')+'</span></div>').join(''):empty('لا توجد تقارير',''))+'</div></div></div>';
+ const officerCards=managerAccounts.length?managerAccounts.map((account,index)=>{const row=managerOfficerStates.find(x=>x.user_id===account.id)||{};const p=row.payload||{};const updated=row.updated_at?new Date(row.updated_at).toLocaleString('ar-DZ'):'لا توجد بيانات';return `<div class="manager-card"><h3>مسؤول الأمن والوقاية ${index+1}</h3><p>${esc(account.email||'بريد غير متوفر')}</p><div class="manager-number">${Array.isArray(p.workers)?p.workers.length:0}</div><p>${Array.isArray(p.rooms)?p.rooms.length:0} غرفة &nbsp;·&nbsp; ${Array.isArray(p.shifts)?p.shifts.length:0} مناوبة &nbsp;·&nbsp; ${Array.isArray(p.incidents)?p.incidents.length:0} تقرير</p><p>آخر مزامنة: ${esc(updated)}</p><details><summary>عرض بيانات الحساب</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;font-size:10px;direction:ltr;text-align:left">${esc(JSON.stringify(p,null,2))}</pre></details></div>`;}).join(''):'<div class="empty"><b>لا توجد حسابات مسؤولين</b>أنشئ الحساب الأول.</div>';
+  html+='<div class="manager-console"><div class="command-head"><div class="command-brand"><div class="command-logo">HSE</div><div><h2 class="command-title">مركز القيادة</h2><div class="command-subtitle">MULTICATERING ALGERIA · CONTROL</div></div></div><span class="command-live">لوحة المدير</span></div>';
+  html+='<div class="command-kpis"><div class="command-kpi"><small>مسؤولو الأمن والوقاية</small><b>'+managerAccounts.length+'</b></div><div class="command-kpi"><small>إجمالي التقارير</small><b>'+incidents.length+'</b></div><div class="command-kpi"><small>بانتظار المراجعة</small><b>'+openReports.length+'</b></div><div class="command-kpi"><small>تقارير اليوم</small><b>'+todayReports.length+'</b></div></div>';
+  html+='<div class="command-section"><div class="command-section-head"><h3>إدارة الحسابات</h3><span class="command-pill">'+managerAccounts.length+' حساب</span></div><div class="manager-create-card"><form id="officer-create-form" onsubmit="createOfficerAccount(event)"><div class="field"><label>البريد الإلكتروني</label><input id="officer-email" type="email" required autocomplete="off" placeholder="officer@company.com"></div><div class="field"><label>كلمة المرور · 8 أحرف على الأقل</label><input id="officer-password" type="password" required minlength="8" autocomplete="new-password" placeholder="كلمة مرور مؤقتة"></div><button id="officer-create-button" class="primary" type="submit">إنشاء حساب مسؤول +</button><p id="officer-create-status" class="sub" style="margin-top:10px;overflow-wrap:anywhere"></p></form></div></div>';
+  html+='<div class="command-section"><div class="command-section-head"><h3>حسابات المسؤولين</h3><small>الحالة · العمال · التشغيل</small></div><div class="manager-grid">'+officerCards+'</div></div>';
+  html+='<div class="command-section"><div class="command-section-head"><h3>آخر التقارير</h3><button class="secondary" onclick="go(\'reports\')">فتح مركز التقارير ↗</button></div><div class="command-report-list">'+(latest.length?latest.map(i=>'<div class="manager-row"><b>'+esc(i.title||'تقرير دون عنوان')+'</b><small>'+esc(i.date||'—')+' · '+esc(i.type||'غير مصنف')+'</small><p>'+esc(i.desc||'لا توجد تفاصيل إضافية')+'</p><span class="manager-tag">'+(openReports.some(x=>x.key===i.key)?'بانتظار المراجعة':'تمت المراجعة')+'</span></div>').join(''):empty('لا توجد تقارير',''))+'</div></div></div>';
  }
  }else if(page==='reports'){
  if(userRole==='manager'){
