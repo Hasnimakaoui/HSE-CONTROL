@@ -40,3 +40,5 @@ jobs:
           retention-days: 14
 
 # Trigger APK rebuild after JavaScript syntax fix.
+
+# Rebuild includes manager-managed HSE officer accounts.
