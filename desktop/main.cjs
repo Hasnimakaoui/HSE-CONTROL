@@ -7,7 +7,7 @@ function createWindow() {
     height: 920,
     minWidth: 1024,
     minHeight: 700,
-    title: 'HSE-CONTROL',
+    title: 'HSE MILTI CATERING',
     backgroundColor: '#091324',
     autoHideMenuBar: true,
     webPreferences: {
