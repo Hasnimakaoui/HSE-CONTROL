@@ -2,7 +2,7 @@ name: Build HSE CONTROL APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 'feature/multi-officer-isolation' ]
   workflow_dispatch:
 
 permissions:
