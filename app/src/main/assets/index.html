@@ -541,7 +541,7 @@ function render(){
  const reviewedReports=incidents.length-openReports.length;
  const latest=incidents.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,6);
  const officerCards=managerAccounts.length?managerAccounts.map((account,index)=>{const row=managerOfficerStates.find(x=>x.user_id===account.id)||{};const p=row.payload||{};const updated=row.updated_at?new Date(row.updated_at).toLocaleString('ar-DZ'):'لا توجد بيانات';return `<div class="manager-card"><h3>مسؤول الأمن والوقاية ${index+1}</h3><p>${esc(account.email||'بريد غير متوفر')}</p><div class="manager-number">${Array.isArray(p.workers)?p.workers.length:0}</div><p>${Array.isArray(p.rooms)?p.rooms.length:0} غرفة &nbsp;·&nbsp; ${Array.isArray(p.shifts)?p.shifts.length:0} مناوبة &nbsp;·&nbsp; ${Array.isArray(p.incidents)?p.incidents.length:0} تقرير</p><p>آخر مزامنة: ${esc(updated)}</p><details><summary>عرض بيانات الحساب</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;font-size:10px;direction:ltr;text-align:left">${esc(JSON.stringify(p,null,2))}</pre></details></div>`;}).join(''):'<div class="empty"><b>لا توجد حسابات مسؤولين</b>أنشئ الحساب الأول.</div>';
-  html+='<div class="manager-console"><div class="command-head"><div class="command-brand"><div class="command-logo">HSE<span> / 01</span></div><div><div class="command-overline">MULTI CATERING ALGERIA <i>•</i> EXECUTIVE OFFICE</div><h2 class="command-title">مركز القيادة التنفيذي</h2><div class="command-subtitle">إدارة الأداء · مراقبة التقارير · الإشراف على الفرق</div></div></div><div class="command-head-actions"><span class="command-live">النظام جاهز</span><button class="command-exit" onclick="signOut()">خروج ↗</button></div></div><div class="command-intro"><div><div class="command-eyebrow">EXECUTIVE OVERVIEW <span> / </span> 01</div><h1>الرؤية الكاملة.<br><em>القرار في الوقت المناسب.</em></h1><p>ملخص مباشر لنشاط مسؤولي الأمن والوقاية والتقارير التي تتطلب المتابعة.</p></div><div class="command-intro-mark"><span>HSE</span><small>CONTROL<br>ROOM</small><b></b></div></div>';
+  html+='<div class="manager-console"><div class="command-head"><div class="command-brand"><div class="command-logo">HSE<span> / 01</span></div><div><div class="command-overline">MULTI CATERING ALGERIA <i>•</i> EXECUTIVE OFFICE</div><h2 class="command-title">مركز القيادة التنفيذي</h2><div class="command-subtitle">إدارة الأداء · مراقبة التقارير · الإشراف على الفرق</div></div></div><div class="command-head-actions"><span class="command-live">النظام جاهز</span><button class="command-exit" onclick="signOut()">خروج ↗</button></div></div><div class="manager-quickline"><span>لوحة المتابعة</span><span class="manager-live-dot">مباشر</span></div>';
   html+='<div class="command-kpis"><div class="command-kpi"><small>مسؤولو الأمن والوقاية</small><b>'+managerAccounts.length+'</b></div><div class="command-kpi"><small>إجمالي التقارير</small><b>'+incidents.length+'</b></div><div class="command-kpi"><small>بانتظار المراجعة</small><b>'+openReports.length+'</b></div><div class="command-kpi"><small>تقارير اليوم</small><b>'+todayReports.length+'</b></div></div>';
   html+='<div class="command-section command-accounts-section"><div class="command-section-head"><div><div class="command-eyebrow">ACCESS & IDENTITY</div><h3>إدارة الوصول</h3></div><span class="command-pill">'+managerAccounts.length+' حساب مسؤول</span></div><div class="command-create-layout"><div class="manager-create-card"><div class="create-card-title"><span>+</span><div><b>إضافة مسؤول جديد</b><small>إنشاء حساب دخول مستقل وآمن</small></div></div><form id="officer-create-form" onsubmit="createOfficerAccount(event)"><div class="field"><label>البريد الإلكتروني المهني</label><input id="officer-email" type="email" required autocomplete="off" placeholder="officer@company.com"></div><div class="field"><label>كلمة المرور الأولية</label><input id="officer-password" type="password" required minlength="8" autocomplete="new-password" placeholder="8 أحرف على الأقل"></div><button id="officer-create-button" class="primary" type="submit">إنشاء حساب مسؤول <span>↗</span></button><p id="officer-create-status" class="sub" style="margin-top:10px;overflow-wrap:anywhere"></p></form></div><div class="access-note"><div class="access-note-icon">⌁</div><b>صلاحيات منفصلة. إشراف موحّد.</b><p>لكل مسؤول مساحة بيانات مستقلة. تتيح هذه اللوحة للمدير متابعة النشاط العام دون خلط سجلات الحسابات.</p><div class="access-rule"><span></span> إدارة مركزية <span></span> خصوصية البيانات</div></div></div></div>';
   html+='<div class="command-section"><div class="command-section-head"><h3>حسابات المسؤولين</h3><small>الحالة · العمال · التشغيل</small></div><div class="manager-grid">'+officerCards+'</div></div>';
@@ -566,6 +566,10 @@ function render(){
  }
  $('#app').innerHTML=html;
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page||(page==='incidents'&&b.dataset.page==='more')||(['reports','settings'].includes(page)&&b.dataset.page==='more')));
+ if(userRole==='manager'){
+  const managerNav=[['manager-dashboard','⌂','الرئيسية'],['manager-accounts','♙','المسؤولون'],['reports','▤','التقارير'],['manager-add','＋','إضافة'],['more','⋯','المزيد']];
+  document.querySelectorAll('.nav button').forEach((b,i)=>{const n=managerNav[i];if(!n)return;b.dataset.page=n[0];b.innerHTML='<span>'+({0:'<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>',1:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-2a6.5 6.5 0 0 1 13 0v2M17 8h5M19.5 5.5v5"/></svg>',2:'<svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 12h8M8 16h8"/></svg>',3:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',4:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>'})[i]+'</span>'+n[2];b.classList.toggle('active',(i===0&&page==='home')||(i===1&&page==='manager-dashboard')||(i===2&&page==='reports')||(i===4&&['more','settings'].includes(page)));});
+ }
 }
 function uiIcon(name){const paths={workers:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-2a6.5 6.5 0 0 1 13 0v2ZM16 4.8a3.5 3.5 0 0 1 0 6.5M18 14a4.5 4.5 0 0 1 3.5 4.5V20"/>',housing:'<path d="M3 21V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v16M8 7h2m4 0h2M8 11h2m4 0h2M8 15h2m4 0h2M2 21h20"/>',beds:'<path d="M3 20V5m0 10h18v5M3 11h18v4M7 11V8a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3m0 0V8a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>',shifts:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',safety:'<path d="M12 3 20 6v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6Z"/><path d="m8.5 12 2.3 2.3 4.8-5"/>',reports:'<path d="M6 3h8l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 12h8M8 16h8"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.8 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.8-1l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.8-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.8 1l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2Z"/>'};return '<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">'+(paths[name]||paths.reports)+'</svg>'}
  function stat(label,num,ico,hint){return '<div class="stat"><div class="stat-top"><span>'+label+'</span><span class="ico">'+ico+'</span></div><div class="num">'+num+'</div><div class="hint">'+hint+'</div></div>'}
@@ -604,8 +608,89 @@ function removeIncident(k){incidents=incidents.filter(i=>i.key!==k);save('incide
 function saveSettings(){settings.site=$('#site-name').value.trim()||'الموقع الرئيسي';save('settings',settings);toast('تم حفظ الإعدادات');render()}
 function exportData(){let data={product:'HSE CONTROL',version:1,exportedAt:new Date().toISOString(),workers,rooms,shifts,incidents,settings};let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hse-control-backup.json';a.click();URL.revokeObjectURL(a.href);toast('تم تجهيز النسخة الاحتياطية')}
 function importData(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{try{let d=JSON.parse(reader.result);if(!d||d.product!=='HSE CONTROL')throw Error('bad');workers=Array.isArray(d.workers)?d.workers:[];rooms=Array.isArray(d.rooms)?d.rooms:[];shifts=Array.isArray(d.shifts)?d.shifts:[];incidents=Array.isArray(d.incidents)?d.incidents:[];settings=d.settings||{site:'الموقع الرئيسي'};['workers','rooms','shifts','incidents','settings'].forEach(k=>save(k,eval(k)));toast('تمت استعادة البيانات');render()}catch(err){toast('الملف غير صالح أو ليس نسخة HSE MULTI CATERING')}};reader.readAsText(f)}
-document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!authSession)return;go(b.dataset.page)}));
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!authSession)return;const p=b.dataset.page;if(userRole==='manager'){if(p==='manager-accounts'){page='manager-dashboard';render();document.querySelector('.command-accounts-section')?.scrollIntoView({behavior:'smooth',block:'start'});return}if(p==='manager-add'){page='manager-dashboard';render();document.querySelector('.manager-create-card')?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('officer-email')?.focus({preventScroll:true});return}}go(p==='manager-dashboard'?'home':p)}));
 bootAuth();
 </script>
 </body>
 </html>
+
+<style>
+/* Compact manager command centre: no long hero, fixed task dock */
+body:has(.manager-console){background:#eef2f5}
+.app:has(.manager-console){padding:0 12px 100px;max-width:1100px}
+.manager-console{max-width:100%;padding-bottom:8px}
+.manager-console .command-head{margin:8px 0 0;padding:12px 14px;min-height:68px;border-radius:14px;background:linear-gradient(120deg,#10263b,#1c3b55);box-shadow:0 8px 20px #10263b18}
+.manager-console .command-logo{width:42px;height:42px;flex-basis:42px;border-radius:11px}
+.manager-console .command-overline{font-size:7px;letter-spacing:1px;margin-bottom:4px}
+.manager-console .command-title{font-size:16px}
+.manager-console .command-subtitle{font-size:9px;margin-top:3px}
+.manager-console .command-live{font-size:8px;padding:6px 7px}
+.manager-console .command-exit{font-size:9px;padding:7px 8px}
+.manager-console .command-intro{display:none!important}
+.manager-console .manager-quickline{display:flex;justify-content:space-between;align-items:center;margin:12px 2px 10px;font-size:12px;font-weight:800;color:#17334b}
+.manager-console .manager-live-dot{display:flex;align-items:center;gap:6px;color:#287b68;font-size:9px;font-weight:700}
+.manager-console .manager-live-dot:before{content:"";width:6px;height:6px;border-radius:50%;background:#2ca887;box-shadow:0 0 0 3px #2ca8871b}
+.manager-console .command-kpis{gap:7px;margin:0 0 14px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.manager-console .command-kpi{padding:11px 9px;min-height:72px;border-radius:12px;background:#fff;border-color:#dce3e8}
+.manager-console .command-kpi:after{width:2px}
+.manager-console .command-kpi small{font-size:9px;line-height:1.45;color:#697b8a}
+.manager-console .command-kpi b{font-size:24px;margin-top:7px;color:#173750}
+.manager-console .command-section{margin:14px 0}
+.manager-console .command-section-head{margin-bottom:8px}
+.manager-console .command-section-head h3{font-size:13px}
+.manager-console .command-eyebrow{font-size:8px;letter-spacing:1px;margin-bottom:4px}
+.manager-console .manager-create-layout{grid-template-columns:minmax(0,1fr) minmax(0,.75fr);gap:9px}
+.manager-console .manager-create-card{padding:13px;border-radius:12px}
+.manager-console .create-card-title{margin-bottom:9px}
+.manager-console .create-card-title>span{width:30px;height:30px;font-size:18px}
+.manager-console .create-card-title b{font-size:12px}
+.manager-console .create-card-title small{font-size:9px}
+.manager-console .manager-create-card .field{margin:8px 0}
+.manager-console .manager-create-card label{font-size:10px;margin-bottom:5px}
+.manager-console .manager-create-card input{padding:10px;font-size:12px}
+.manager-console .manager-create-card .primary{min-height:39px;font-size:11px}
+.manager-console .access-note{min-height:0;padding:14px;border-radius:12px}
+.manager-console .access-note-icon{font-size:20px;margin-bottom:8px}
+.manager-console .access-note>b{font-size:13px}
+.manager-console .access-note>p{font-size:10px;line-height:1.7;margin:7px 0}
+.manager-console .access-rule{font-size:8px;gap:5px}
+.manager-console .manager-grid{gap:8px}
+.manager-console .manager-card{padding:12px;border-radius:12px}
+.manager-console .manager-card h3{font-size:11px;margin-bottom:6px}
+.manager-console .manager-card h3:before{width:28px;height:28px}
+.manager-console .manager-card .manager-number{font-size:27px}
+.manager-console .command-report-list{padding:0 12px;border-radius:12px}
+.manager-console .manager-row{padding:11px 0}
+.manager-console .manager-row>b{font-size:11px}
+.manager-console .manager-row>small,.manager-console .manager-row>p{font-size:10px}
+body:has(.manager-console) .nav{z-index:100;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:rgba(13,29,45,.97);border-top:1px solid #334a60;box-shadow:0 -8px 24px #10263b24}
+body:has(.manager-console) .nav-inner{width:min(620px,100%);gap:6px}
+body:has(.manager-console) .nav button{flex:1;min-width:0;padding:5px 2px;border-radius:10px;color:#a7b6c4;font-size:9px}
+body:has(.manager-console) .nav button span{width:29px;height:27px;margin:0 auto 3px;background:transparent;border-radius:8px}
+body:has(.manager-console) .nav button span svg{width:20px;height:20px;stroke-width:1.65}
+body:has(.manager-console) .nav button.active{color:#f0d69b;background:#d9b46b12}
+body:has(.manager-console) .nav button.active span{background:#d9b46b16;color:#f0d69b}
+@media(max-width:600px){
+ .app:has(.manager-console){padding:0 10px 94px}
+ .manager-console .command-head{padding:11px 10px;gap:8px}
+ .manager-console .command-brand{gap:8px}
+ .manager-console .command-logo{width:37px;height:37px;flex-basis:37px}
+ .manager-console .command-title{font-size:14px}
+ .manager-console .command-overline{font-size:6px;letter-spacing:.6px}
+ .manager-console .command-subtitle{font-size:8px;max-width:180px}
+ .manager-console .command-head-actions{gap:4px}
+ .manager-console .command-live{font-size:7px;padding:5px}
+ .manager-console .command-exit{font-size:8px;padding:6px}
+ .manager-console .command-kpis{gap:6px}
+ .manager-console .command-kpi{padding:10px 7px;min-height:68px}
+ .manager-console .command-kpi small{font-size:8px}
+ .manager-console .command-kpi b{font-size:21px}
+ .manager-console .manager-create-layout{grid-template-columns:1fr}
+ .manager-console .access-note{display:none}
+ .manager-console .manager-grid{grid-template-columns:1fr}
+ .manager-console .manager-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 10px}
+ .manager-console .manager-card h3{grid-column:1/-1}
+ .manager-console .manager-card p{margin:2px 0}
+ .manager-console .manager-card .manager-number{grid-column:2;grid-row:2;font-size:25px}
+}
+</style>
