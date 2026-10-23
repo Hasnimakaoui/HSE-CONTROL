@@ -3,6 +3,8 @@
     <application
         android:allowBackup="true"
         android:label="HSE MULTI CATERING"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false"
         android:supportsRtl="true">
