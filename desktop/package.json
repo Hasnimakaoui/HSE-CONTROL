@@ -1,9 +1,9 @@
 {
-  "name": "hse-milti-catering-desktop",
+  "name": "hse-control-desktop",
   "version": "1.0.0",
-  "description": "HSE MILTI CATERING desktop application",
+  "description": "HSE-CONTROL desktop application",
   "main": "main.cjs",
-  "author": "HSE MILTI CATERING",
+  "author": "HSE-CONTROL",
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
@@ -15,7 +15,7 @@
   },
   "build": {
     "appId": "dz.hsecontrol.desktop",
-    "productName": "HSE MILTI CATERING",
+    "productName": "HSE-CONTROL",
     "directories": {
       "output": "dist"
     },
@@ -32,7 +32,7 @@
           ]
         }
       ],
-      "artifactName": "HSE-MILTI-CATERING-Setup-${version}.${ext}"
+      "artifactName": "HSE-CONTROL-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
