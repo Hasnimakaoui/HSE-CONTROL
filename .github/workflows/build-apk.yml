@@ -44,3 +44,5 @@ jobs:
 # Rebuild includes manager-managed HSE officer accounts.
 
 # Rebuild APK with manager dashboard visual refresh.
+
+# Rebuild APK for concise manager dashboard.
