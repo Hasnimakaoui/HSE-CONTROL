@@ -258,25 +258,24 @@ async function initializeCloud(){
    await sb.auth.signOut();authSession=null;userRole=null;
    throw new Error('This account has no assigned role');
  }
- const localPayload=currentCloudPayload();
- const {data,error}=await sb.from('app_state').select('payload,updated_at').eq('id',1).maybeSingle();
- if(error) throw error;
- if(data?.payload){
-   // Keep existing device records if the shared cloud row is still empty.
-   if(userRole==='hse_officer' && !payloadHasRecords(data.payload) && payloadHasRecords(localPayload)){
-     const stamp=new Date().toISOString();
-     const {error:seedError}=await sb.from('app_state').upsert({id:1,payload:localPayload,updated_by:authSession.user.id,updated_at:stamp},{onConflict:'id'});
-     if(seedError) throw seedError;
-     lastCloudUpdatedAt=stamp;
-   }else{
+ cloudReady=false;
+ if(userRole==='manager'){
+   const {data,error}=await sb.from('officer_state').select('user_id,payload,updated_at').order('updated_at',{ascending:false});
+   if(error)throw error;
+   managerOfficerStates=Array.isArray(data)?data:[];
+ }else{
+   const localPayload=currentCloudPayload();
+   const {data,error}=await sb.from('officer_state').select('payload,updated_at').eq('user_id',authSession.user.id).maybeSingle();
+   if(error)throw error;
+   if(data?.payload){
      applyCloudPayload(data.payload);
      lastCloudUpdatedAt=data.updated_at||null;
+   }else{
+     const stamp=new Date().toISOString();
+     const {error:insertError}=await sb.from('officer_state').insert({user_id:authSession.user.id,payload:localPayload,updated_at:stamp});
+     if(insertError)throw insertError;
+     lastCloudUpdatedAt=stamp;
    }
- }else if(userRole==='hse_officer'){
-   const stamp=new Date().toISOString();
-   const {error:insertError}=await sb.from('app_state').insert({id:1,payload:localPayload,updated_by:authSession.user.id,updated_at:stamp});
-   if(insertError && insertError.code!=='23505') throw insertError;
-   lastCloudUpdatedAt=stamp;
  }
  cloudReady=true;
  if(cloudTimer)clearInterval(cloudTimer);
@@ -291,26 +290,33 @@ async function syncCloud(){
      syncQueued=false;
      const payload=currentCloudPayload();
      const stamp=new Date().toISOString();
-     const {error}=await sb.from('app_state').upsert({id:1,payload,updated_by:authSession.user.id,updated_at:stamp},{onConflict:'id'});
+     const {error}=await sb.from('officer_state').upsert({user_id:authSession.user.id,payload,updated_at:stamp},{onConflict:'user_id'});
      if(error)throw error;
      lastCloudUpdatedAt=stamp;
    }while(syncQueued);
- }catch(e){toast('تعذر مزامنة البيانات السحابية. تحقق من الاتصال والصلاحيات.');}
+ }catch(e){toast('تعذر مزامنة بيانات حسابك. تحقق من الاتصال والصلاحيات.');}
  finally{cloudBusy=false;}
 }
 async function pullCloud(){
  if(!cloudReady || !authSession || cloudBusy || document.querySelector('#app form'))return;
  try{
-   const {data,error}=await sb.from('app_state').select('payload,updated_at').eq('id',1).maybeSingle();
+   if(userRole==='manager'){
+     const {data,error}=await sb.from('officer_state').select('user_id,payload,updated_at').order('updated_at',{ascending:false});
+     if(error)return;
+     const nextStates=Array.isArray(data)?data:[];
+     if(JSON.stringify(nextStates)!==JSON.stringify(managerOfficerStates)){
+       managerOfficerStates=nextStates;
+       if(page==='manager-dashboard')render();
+     }
+     return;
+   }
+   const {data,error}=await sb.from('officer_state').select('payload,updated_at').eq('user_id',authSession.user.id).maybeSingle();
    if(error||!data?.payload)return;
    if(data.updated_at && lastCloudUpdatedAt && Date.parse(data.updated_at)<=Date.parse(lastCloudUpdatedAt))return;
    const remote=JSON.stringify(data.payload);
    const local=JSON.stringify(currentCloudPayload());
    lastCloudUpdatedAt=data.updated_at||lastCloudUpdatedAt;
-   if(remote!==local){
-     applyCloudPayload(data.payload);
-     render();
-   }
+   if(remote!==local){applyCloudPayload(data.payload);render();}
  }catch(e){/* Keep the current screen usable during temporary network loss. */}
 }
 async function signOut(){if(cloudTimer)clearInterval(cloudTimer);cloudTimer=null;await sb.auth.signOut();authSession=null;userRole=null;cloudReady=false;lastCloudUpdatedAt=null;go('home');render()}
